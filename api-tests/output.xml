@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.10.12 on linux)" generated="2025-10-31T00:39:41.012533" rpa="false" schemaversion="5">
+<suite id="s1" name="Testcases" source="/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases">
+<suite id="s1-s1" name="Auth Tests" source="/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/auth_tests.robot">
+<test id="s1-s1-t1" name="CT01 - Registro de novo usuário válido" line="7">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:41.121459" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:41.121300" elapsed="0.000311"/>
+</kw>
+<kw name="Generate Random String">
+<msg time="2025-10-31T00:39:41.123197" level="FAIL">No keyword with name 'Generate Random String' found.</msg>
+<var>${email}</var>
+<arg>5</arg>
+<arg>[LETTERS]</arg>
+<status status="FAIL" start="2025-10-31T00:39:41.123161" elapsed="0.000075">No keyword with name 'Generate Random String' found.</status>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${body}</var>
+<arg>email=test${email}@mail.com</arg>
+<arg>password=123456</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:41.123366" elapsed="0.000014"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/register</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:41.123459" elapsed="0.000011"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:41.123538" elapsed="0.000009"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:41.120672" elapsed="0.003003">No keyword with name 'Generate Random String' found.</status>
+</test>
+<test id="s1-s1-t2" name="CT02 - Registro com e-mail existente" line="14">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-31T00:39:41.124242" level="INFO">${body} = {'email': 'user@example.com', 'password': '123456'}</msg>
+<var>${body}</var>
+<arg>email=${USER_EMAIL}</arg>
+<arg>password=123456</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-31T00:39:41.123987" elapsed="0.000275"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:41.125731" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8abc0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.326731" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d88280&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.728448" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8aec0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.729982" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8b100&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/register</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:41.124350" elapsed="0.622449">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8b100&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:41.747380" elapsed="0.000067"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:41.123801" elapsed="0.624083">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8b100&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<test id="s1-s1-t3" name="CT03 - Login de sucesso (Admin)" line="19">
+<kw name="Login As Admin" owner="keywords">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:41.749637" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:41.749515" elapsed="0.000251"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-31T00:39:41.750033" level="INFO">${body} = {'email': 'admin@example.com', 'password': 'password123'}</msg>
+<var>${body}</var>
+<arg>email=${ADMIN_EMAIL}</arg>
+<arg>password=${ADMIN_PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-31T00:39:41.749844" elapsed="0.000206"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:41.751068" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8cee0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:41.952006" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d0f0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.354338" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d330&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.355867" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d570&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:41.750119" elapsed="0.606394">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d570&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.356982" elapsed="0.000057"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<var>${token}</var>
+<arg>${response.json()}</arg>
+<arg>token</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.357245" elapsed="0.000034"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<arg>${TOKEN_ADMIN}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.357455" elapsed="0.000030"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:41.749201" elapsed="0.608475">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d570&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:41.748340" elapsed="0.609701">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d570&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<test id="s1-s1-t4" name="CT04 - Login de sucesso (Usuário)" line="22">
+<kw name="Login As User" owner="keywords">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:42.359209" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:42.359104" elapsed="0.000225"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-31T00:39:42.359581" level="INFO">${body} = {'email': 'user@example.com', 'password': 'password123'}</msg>
+<var>${body}</var>
+<arg>email=${USER_EMAIL}</arg>
+<arg>password=${USER_PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-31T00:39:42.359399" elapsed="0.000198"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:42.360312" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f460&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.561367" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f6d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.963625" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f820&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.965579" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8fa90&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:42.359658" elapsed="0.606573">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8fa90&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.966589" elapsed="0.000054"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<var>${token}</var>
+<arg>${response.json()}</arg>
+<arg>token</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.966826" elapsed="0.000032"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<arg>${TOKEN_USER}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:42.967030" elapsed="0.000030"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:42.358929" elapsed="0.608323">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8fa90&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:42.358424" elapsed="0.609214">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8fa90&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<test id="s1-s1-t5" name="CT05 - Login inválido retorna 401" line="25">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:42.968973" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:42.968633" elapsed="0.000652"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-31T00:39:42.969961" level="INFO">${body} = {'email': 'wrong@mail.com', 'password': 'wrong'}</msg>
+<var>${body}</var>
+<arg>email=wrong@mail.com</arg>
+<arg>password=wrong</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-31T00:39:42.969569" elapsed="0.000443"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:42.970832" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5210&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.171824" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5480&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.574405" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb56c0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.576191" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5900&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:42.970115" elapsed="0.606740">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5900&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>401</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:43.577330" elapsed="0.000054"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:42.968015" elapsed="0.609743">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5900&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<test id="s1-s1-t6" name="CT06 - Acessar perfil autenticado" line="31">
+<kw name="Login As User" owner="keywords">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:43.579543" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:43.579429" elapsed="0.000230"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-10-31T00:39:43.579923" level="INFO">${body} = {'email': 'user@example.com', 'password': 'password123'}</msg>
+<var>${body}</var>
+<arg>email=${USER_EMAIL}</arg>
+<arg>password=${USER_PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-10-31T00:39:43.579740" elapsed="0.000200"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:43.580690" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4c70&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.781454" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4700&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:44.183604" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4040&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:44.185139" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb67d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/login</arg>
+<arg>json=${body}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:43.580007" elapsed="0.605739">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb67d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.186135" elapsed="0.000054"/>
+</kw>
+<kw name="Get From Dictionary" owner="Collections">
+<var>${token}</var>
+<arg>${response.json()}</arg>
+<arg>token</arg>
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.186376" elapsed="0.000032"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<arg>${TOKEN_USER}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.186579" elapsed="0.000031"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:43.578843" elapsed="0.607951">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb67d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Create Authorized Session" owner="keywords">
+<arg>${TOKEN_USER}</arg>
+<status status="NOT RUN" start="2025-10-31T00:39:44.187179" elapsed="0.000052"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/me</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.187440" elapsed="0.000035"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.187664" elapsed="0.000029"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:43.578144" elapsed="0.609853">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/login (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb67d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<test id="s1-s1-t7" name="CT07 - Acessar perfil sem token" line="37">
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:44.188956" level="INFO">Creating Session using : alias=api, url=http://localhost:5000/api/v1, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>${BASE_URL}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-10-31T00:39:44.188828" elapsed="0.000252"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-10-31T00:39:44.189765" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73ad0040&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+<msg time="2025-10-31T00:39:44.390724" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73ad0280&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+<msg time="2025-10-31T00:39:44.793712" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb7640&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+<msg time="2025-10-31T00:39:44.795279" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb6b30&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>/auth/me</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-10-31T00:39:44.189165" elapsed="0.606777">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb6b30&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${response.status_code}</arg>
+<arg>401</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-10-31T00:39:44.796412" elapsed="0.000055"/>
+</kw>
+<status status="FAIL" start="2025-10-31T00:39:44.188349" elapsed="0.608509">ConnectionError: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/v1/auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb6b30&gt;: Failed to establish a new connection: [Errno 111] Connection refused'))</status>
+</test>
+<status status="FAIL" start="2025-10-31T00:39:41.024109" elapsed="3.773565"/>
+</suite>
+<status status="FAIL" start="2025-10-31T00:39:41.013136" elapsed="3.785417"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="7" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Testcases" id="s1" pass="0" fail="7" skip="0">Testcases</stat>
+<stat name="Auth Tests" id="s1-s1" pass="0" fail="7" skip="0">Testcases.Auth Tests</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-10-31T00:39:41.125731" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8abc0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.326731" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d88280&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.728448" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73d8aec0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/register</msg>
+<msg time="2025-10-31T00:39:41.751068" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8cee0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:41.952006" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d0f0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.354338" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8d330&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.360312" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f460&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.561367" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f6d0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.963625" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73c8f820&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:42.970832" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5210&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.171824" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb5480&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.574405" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb56c0&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.580690" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4c70&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:43.781454" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4700&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:44.183604" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb4040&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/login</msg>
+<msg time="2025-10-31T00:39:44.189765" level="WARN">Retrying (RetryAdapter(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73ad0040&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+<msg time="2025-10-31T00:39:44.390724" level="WARN">Retrying (RetryAdapter(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73ad0280&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+<msg time="2025-10-31T00:39:44.793712" level="WARN">Retrying (RetryAdapter(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x74fd73cb7640&gt;: Failed to establish a new connection: [Errno 111] Connection refused')': /api/v1/auth/me</msg>
+</errors>
+</robot>
