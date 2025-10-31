@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.10.12 on linux)" generated="2025-10-31T13:02:57.972892" rpa="false" schemaversion="5">
+<suite id="s1" name="Auth Tests" source="/home/gregoryozaki/Documentos/compass/challenge-final/frontend-tests/testcases/auth_tests.robot">
+<test id="s1-t1" name="CT01 - Registro e Login de Novo Usuário" line="7">
+<kw name="Open Cinema App" owner="keywords">
+<kw name="New Browser" owner="Browser">
+<msg time="2025-10-31T13:02:58.140823" level="INFO">{"browser": "chromium", "headless": false, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "/home/gregoryozaki/Documentos/compass/challenge-final/frontend-tests/browser/traces/temp/9d9fc159-be14-480a-b676-7da95ce48022"}</msg>
+<msg time="2025-10-31T13:02:58.145966" level="INFO">Starting Browser process /home/gregoryozaki/.local/lib/python3.10/site-packages/Browser/wrapper/index.js using at 127.0.0.1:46675</msg>
+<msg time="2025-10-31T13:02:58.684498" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":false,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"/home/gregoryozaki/Documentos/compass/challenge-final/frontend-tests/browser/traces/temp/9d9fc159-be14-480a-b676-7da95ce48022"}</msg>
+<arg>headless=False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2025-10-31T13:02:58.140345" elapsed="0.544315"/>
+</kw>
+<kw name="New Page" owner="Browser">
+<msg time="2025-10-31T13:03:01.036495" level="INFO">Successfully initialized new page object and opened url: http://localhost:3002</msg>
+<msg time="2025-10-31T13:03:01.036562" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
+<arg>${BASE_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2025-10-31T13:02:58.684935" elapsed="2.351727"/>
+</kw>
+<status status="PASS" start="2025-10-31T13:02:58.139608" elapsed="2.897177"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2025-10-31T13:03:01.037346" level="INFO">Clicks the element 'text=Registrar'.</msg>
+<msg time="2025-10-31T13:03:11.118715" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-1.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-1.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2025-10-31T13:03:11.118811" level="INFO">See also file:///home/gregoryozaki/Documentos/compass/challenge-final/frontend-tests/playwright-log.txt for additional details.</msg>
+<msg time="2025-10-31T13:03:11.119088" level="FAIL">TimeoutError: locator.click: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('text=Registrar')
+</msg>
+<arg>text=Registrar</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2025-10-31T13:03:01.036963" elapsed="10.082935">TimeoutError: locator.click: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('text=Registrar')
+</status>
+</kw>
+<kw name="Email" owner="FakerLibrary">
+<var>${new_email}</var>
+<status status="NOT RUN" start="2025-10-31T13:03:11.120131" elapsed="0.000061"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<arg>input[name="email"]</arg>
+<arg>${new_email}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.120320" elapsed="0.000041"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<arg>input[name="password"]</arg>
+<arg>password123</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.120463" elapsed="0.000033"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>text=Registrar</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.120593" elapsed="0.000033"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>text=Home</arg>
+<arg>visible</arg>
+<arg>5s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.120723" elapsed="0.000030"/>
+</kw>
+<kw name="Logout" owner="keywords">
+<status status="NOT RUN" start="2025-10-31T13:03:11.120884" elapsed="0.000039"/>
+</kw>
+<status status="FAIL" start="2025-10-31T13:02:58.139210" elapsed="12.981871">TimeoutError: locator.click: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('text=Registrar')
+</status>
+</test>
+<test id="s1-t2" name="CT02 - Tentativa de Login com Credenciais Inválidas" line="17">
+<kw name="Open Cinema App" owner="keywords">
+<kw name="New Browser" owner="Browser">
+<msg time="2025-10-31T13:03:11.161368" level="INFO">Switching browser to browser=91d06a0a-6ce7-4db0-a8bf-21c72405d3e8</msg>
+<msg time="2025-10-31T13:03:11.163734" level="INFO">Successfully changed active browser: browser=91d06a0a-6ce7-4db0-a8bf-21c72405d3e8</msg>
+<msg time="2025-10-31T13:03:11.163848" level="INFO">Reusing existing browser with id: browser=91d06a0a-6ce7-4db0-a8bf-21c72405d3e8</msg>
+<arg>headless=False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2025-10-31T13:03:11.160980" elapsed="0.002943"/>
+</kw>
+<kw name="New Page" owner="Browser">
+<msg time="2025-10-31T13:03:11.759999" level="INFO">Successfully initialized new page object and opened url: http://localhost:3002</msg>
+<msg time="2025-10-31T13:03:11.760075" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
+<arg>${BASE_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2025-10-31T13:03:11.164143" elapsed="0.596029"/>
+</kw>
+<status status="PASS" start="2025-10-31T13:03:11.160619" elapsed="0.599665"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2025-10-31T13:03:11.760864" level="INFO">Clicks the element 'text=Login'.</msg>
+<msg time="2025-10-31T13:03:11.898365" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-2.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-2.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2025-10-31T13:03:11.898454" level="INFO">See also file:///home/gregoryozaki/Documentos/compass/challenge-final/frontend-tests/playwright-log.txt for additional details.</msg>
+<msg time="2025-10-31T13:03:11.898558" level="FAIL">Error: locator.click: Error: strict mode violation: locator('text=Login') resolved to 2 elements:
+    1) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('navigation').getByRole('link', { name: 'Login' })
+    2) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('contentinfo').getByRole('link', { name: 'Login' })
+
+Call log:
+  - waiting for locator('text=Login')
+</msg>
+<arg>text=Login</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2025-10-31T13:03:11.760462" elapsed="0.138272">Error: locator.click: Error: strict mode violation: locator('text=Login') resolved to 2 elements:
+    1) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('navigation').getByRole('link', { name: 'Login' })
+    2) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('contentinfo').getByRole('link', { name: 'Login' })
+
+Call log:
+  - waiting for locator('text=Login')
+</status>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<arg>input[name="email"]</arg>
+<arg>fake@user.com</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.898971" elapsed="0.000061"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<arg>input[name="password"]</arg>
+<arg>wrongpass</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.899202" elapsed="0.000044"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>text=Entrar</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.899353" elapsed="0.000038"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>text=Credenciais inválidas</arg>
+<arg>visible</arg>
+<arg>5s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2025-10-31T13:03:11.899491" elapsed="0.000033"/>
+</kw>
+<status status="FAIL" start="2025-10-31T13:03:11.157035" elapsed="0.742629">Error: locator.click: Error: strict mode violation: locator('text=Login') resolved to 2 elements:
+    1) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('navigation').getByRole('link', { name: 'Login' })
+    2) &lt;a href="/login"&gt;Login&lt;/a&gt; aka getByRole('contentinfo').getByRole('link', { name: 'Login' })
+
+Call log:
+  - waiting for locator('text=Login')
+</status>
+</test>
+<status status="FAIL" start="2025-10-31T13:02:57.973403" elapsed="13.953370"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="2" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="2" skip="0" id="s1" name="Auth Tests">Auth Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
