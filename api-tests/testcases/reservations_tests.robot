@@ -3,7 +3,7 @@ Resource    ../resources/variables.robot
 Resource    ../resources/keywords.robot
 Library     RequestsLibrary
 
-Test Teardown    Full Cleanup Teardown # Chamada correta para limpeza completa
+Test Teardown    Full Cleanup Teardown
 
 *** Variables ***
 ${RESERVATION_ENDPOINT}    /reservations/

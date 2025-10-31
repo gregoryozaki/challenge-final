@@ -5,18 +5,19 @@ Library     RequestsLibrary
 Library     String
 
 Test Setup       Login As Admin
-Test Teardown    Run Keyword If    '${CREATED_USER_ID}' != 'None'    Delete Created User
+Test Teardown    Run Keyword If    '${CREATED_USER_ID}' != 'None'    Safe Delete Created User
 
 *** Variables ***
 ${USER_ENDPOINT}    /users/
 ${CREATED_USER_ID}  None
 
 *** Keywords ***
-Delete Created User
-    Log    🔹 Deletando usuário criado: ${CREATED_USER_ID}
-    Create Authorized Session    ${TOKEN_ADMIN}
-    ${delete_response}=    DELETE On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}
-    Log    🧹 Usuário removido (status: ${delete_response.status_code})
+Safe Delete Created User
+    Log    🧹 Tentando deletar usuário criado: ${CREATED_USER_ID}
+    Run Keyword And Ignore Error    Create Authorized Session    ${TOKEN_ADMIN}
+    Run Keyword And Ignore Error    DELETE On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}
+    Set Global Variable    ${CREATED_USER_ID}    None
+
 
 *** Test Cases ***
 CT08 - Listar todos os usuários (Admin - 200)
@@ -28,17 +29,16 @@ CT08 - Listar todos os usuários (Admin - 200)
     Should Be True    ${count} >= 2
 
 CT09 - Tentativa de listar usuários (Usuário Padrão - 403)
-    [Documentation]  Usuário padrão não pode listar todos os usuários
     Login As User
-    Create Authorized Session    ${TOKEN_USER}
-    ${response}=    GET On Session    api    ${USER_ENDPOINT}
+    Create Authorized Session    Bearer ${TOKEN_USER}
+    ${response}=    GET On Session    api    ${USER_ENDPOINT}    expected_status=any
     Validate 403 Forbidden Response    ${response}
-
-CT09 (b) - Tentativa de listar usuários (Sem Token - 401)
-    [Documentation]  Acesso negado sem autenticação
+    
+CT10 (b) - Tentativa de listar usuários (Sem Token - 401)
     Create Unauthorized Session
-    ${response}=    GET On Session    api    ${USER_ENDPOINT}
+    ${response}=    GET On Session    api    ${USER_ENDPOINT}    expected_status=any
     Validate 401 Unauthorized Response    ${response}
+
 
 CT11 - Atualizar dados de um usuário (Admin - PUT)
     [Documentation]  Cria usuário temporário e atualiza nome via admin
