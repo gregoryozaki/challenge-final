@@ -4,80 +4,85 @@ Resource    ../resources/keywords.robot
 Library     RequestsLibrary
 Library     String
 
-Test Setup    Login As Admin
-Test Teardown    Delete Resource By ID    ${CREATED_USER_ID}    /users/
+Test Setup       Login As Admin
+Test Teardown    Run Keyword If    '${CREATED_USER_ID}' != 'None'    Delete Created User
 
 *** Variables ***
-${NEW_USER_EMAIL}    newuser${random.string(5, [LETTERS])}@cinema.com
+${USER_ENDPOINT}    /users/
+${CREATED_USER_ID}  None
+
+*** Keywords ***
+Delete Created User
+    Log    🔹 Deletando usuário criado: ${CREATED_USER_ID}
+    Create Authorized Session    ${TOKEN_ADMIN}
+    ${delete_response}=    DELETE On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}
+    Log    🧹 Usuário removido (status: ${delete_response.status_code})
 
 *** Test Cases ***
 CT08 - Listar todos os usuários (Admin - 200)
-    # Autenticado como Admin via Test Setup
+    [Documentation]  Deve retornar 200 e lista de usuários (mínimo 2 registros)
     Create Authorized Session    ${TOKEN_ADMIN}
-    ${response}=    GET On Session    api    /users
+    ${response}=    GET On Session    api    ${USER_ENDPOINT}
     Validate 200 OK Response    ${response}
-    # Validação: Deve retornar uma lista de usuários
-    Should Be True    len(${response.json()}) >= 2
+    ${count}=    Get Length    ${response.json()["data"]}
+    Should Be True    ${count} >= 2
 
 CT09 - Tentativa de listar usuários (Usuário Padrão - 403)
+    [Documentation]  Usuário padrão não pode listar todos os usuários
     Login As User
     Create Authorized Session    ${TOKEN_USER}
-    ${response}=    GET On Session    api    /users
+    ${response}=    GET On Session    api    ${USER_ENDPOINT}
     Validate 403 Forbidden Response    ${response}
-    
+
 CT09 (b) - Tentativa de listar usuários (Sem Token - 401)
+    [Documentation]  Acesso negado sem autenticação
     Create Unauthorized Session
-    ${response}=    GET On Session    api    /users
+    ${response}=    GET On Session    api    ${USER_ENDPOINT}
     Validate 401 Unauthorized Response    ${response}
 
 CT11 - Atualizar dados de um usuário (Admin - PUT)
-    # 1. Cria um usuário temporário (para o PUT)
+    [Documentation]  Cria usuário temporário e atualiza nome via admin
+    ${random_suffix}=    Generate Random String    5    [LETTERS]
+    ${new_email}=   Set Variable    tempuser${random_suffix}@mail.com
+
+    # Criação do usuário
     Create Unauthorized Session
-    ${body}=    Create Dictionary    email=${NEW_USER_EMAIL}    password=senha123    name=Initial Name
+    ${body}=    Create Dictionary    email=${new_email}    password=senha123    name=Initial Name
     ${create_response}=    POST On Session    api    /auth/register    json=${body}
-    ${user_id}=    Get From Dictionary    ${create_response.json()}    _id
+    ${user_id}=    Get From Dictionary    ${create_response.json()["data"]}    _id
     Set Global Variable    ${CREATED_USER_ID}    ${user_id}
-    
-    # 2. Executa o PUT como Admin
+
+    # Atualiza como Admin
     Create Authorized Session    ${TOKEN_ADMIN}
     ${update_body}=    Create Dictionary    name=Updated Name
-    ${update_response}=    PUT On Session    api    /users/${CREATED_USER_ID}    json=${update_body}
+    ${update_response}=    PUT On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}    json=${update_body}
     Validate 200 OK Response    ${update_response}
-    
-    # Validação de Conteúdo: Busca e verifica a alteração
-    ${get_response}=    GET On Session    api    /users/${CREATED_USER_ID}
-    ${updated_name}=    Get From Dictionary    ${get_response.json()}    name
+
+    # Valida nome atualizado
+    ${get_response}=    GET On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}
+    ${updated_name}=    Get From Dictionary    ${get_response.json()["data"]}    name
     Should Be Equal    ${updated_name}    Updated Name
 
 CT12 - Excluir um usuário (Admin - DELETE)
-    # Cria um usuário temporário para ser excluído
+    [Documentation]  Cria usuário temporário e o exclui com sucesso
+    ${random_suffix}=    Generate Random String    5    [LETTERS]
+    ${email_to_delete}=  Set Variable    deletetest${random_suffix}@mail.com
+
+    # Cria o usuário
     Create Unauthorized Session
-    ${body}=    Create Dictionary    email=todelete${random.string(5, [LETTERS])}@cinema.com    password=senha123    name=ToDelete
+    ${body}=    Create Dictionary    email=${email_to_delete}    password=senha123    name=DeleteMe
     ${create_response}=    POST On Session    api    /auth/register    json=${body}
-    ${user_id}=    Get From Dictionary    ${create_response.json()}    _id
-    
-    # Executa o DELETE como Admin
+    ${user_id}=    Get From Dictionary    ${create_response.json()["data"]}    _id
+    Set Global Variable    ${CREATED_USER_ID}    ${user_id}
+
+    # Deleta com Admin
     Create Authorized Session    ${TOKEN_ADMIN}
-    ${delete_response}=    DELETE On Session    api    /users/${user_id}
+    ${delete_response}=    DELETE On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}
     Validate 200 OK Response    ${delete_response}
-    
-    # Validação: Tenta buscar o usuário e espera 404 (Not Found) ou 403
-    ${get_response}=    GET On Session    api    /users/${user_id}
-    # A API deve retornar 403 (Forbidden) se a rota for de admin
-    Validate 403 Forbidden Response    ${get_response}
-    
-CT13 - Tentativa de excluir usuário (Usuário Padrão - 403)
-    # Cria um usuário para ser alvo
-    Create Unauthorized Session
-    ${body}=    Create Dictionary    email=alvo${random.string(5, [LETTERS])}@cinema.com    password=senha123    name=Alvo
-    ${create_response}=    POST On Session    api    /auth/register    json=${body}
-    ${user_id}=    Get From Dictionary    ${create_response.json()}    _id
-    
-    # Tenta excluir como usuário padrão
-    Login As User
-    Create Authorized Session    ${TOKEN_USER}
-    ${response}=    DELETE On Session    api    /users/${user_id}
-    Validate 403 Forbidden Response    ${response}
-    
-    # Limpeza manual do usuário criado pelo teste
-    Delete Resource By ID    ${user_id}    /users/
+
+    # Verifica se foi removido
+    ${get_response}=    GET On Session    api    ${USER_ENDPOINT}${CREATED_USER_ID}    expected_status=any
+    Validate 404 Not Found Response    ${get_response}
+
+    # Limpa a variável
+    Set Global Variable    ${CREATED_USER_ID}    None

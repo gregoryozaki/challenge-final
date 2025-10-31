@@ -4,8 +4,7 @@ Resource    ../resources/keywords.robot
 Library     RequestsLibrary
 
 Test Setup    Login As Admin
-# Usando Run Keywords para combinar as ações de limpeza
-Test Teardown    Run Keywords    Delete Resource By ID    ${CREATED_MOVIE_ID}    /movies/
+Test Teardown    Cleanup Movie Teardown  # Chamada correta
 
 *** Variables ***
 ${MOVIE_ENDPOINT}    /movies/
@@ -18,7 +17,8 @@ CT14 - Listar Filmes (Público - 200)
     Validate 200 OK Response    ${response}
 
 CT16 - Criação de Filme (Admin - 201)
-    # Autenticado como Admin via Test Setup
+    [Documentation]    Criação de um novo filme, testando privilégios de Admin.
+    # Autenticado como Admin via Test Setup (WORKAROUND)
     ${random_suffix}=    Generate Random String    5    [LETTERS]
     ${new_title}=        Catenate    SEPARATOR=    Novo Filme    ${random_suffix}
     
@@ -32,6 +32,7 @@ CT16 - Criação de Filme (Admin - 201)
     Set Global Variable    ${CREATED_MOVIE_ID}    ${movie_id}
     
 CT17 - Tentativa de Criar Filme (Usuário Padrão - 403)
+    [Documentation]    Verifica se um usuário padrão é impedido de criar um filme.
     Login As User
     Create Authorized Session    ${TOKEN_USER}
     ${body}=    Create Dictionary    title=Filme Proibido    release_date=2025-01-01    duration=100    genre=Drama
@@ -56,5 +57,4 @@ CT19 - Excluir Filme (Admin - DELETE)
     ${response}=    DELETE On Session    api    ${MOVIE_ENDPOINT}${CREATED_MOVIE_ID}
     Validate 200 OK Response    ${response}
     
-    # Limpeza de Variável Global
     Set Global Variable    ${CREATED_MOVIE_ID}    None

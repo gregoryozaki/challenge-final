@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 7.3.2 (Python 3.10.12 on linux)" name="Generator">
+<meta content="Robot Framework 7.0 (Python 3.10.12 on linux)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
 <style media="all">
 :root {
@@ -1068,48 +1068,58 @@ window.stats = (function () {
             });
     }
     function calculatePercents(total, passed, failed, skipped) {
-        if (total == 0)
+        if (total == 0) {
             return [0.0, 0.0, 0.0];
+        }
         var pass = 100.0 * passed / total;
         var skip = 100.0 * skipped / total;
         var fail = 100.0 * failed / total;
         if (pass > 0 && pass < 0.1)
-            pass = 0.1;
+            pass = 0.1
         if (fail > 0 && fail < 0.1)
-            fail = 0.1;
+            fail = 0.1
         if (skip > 0 && skip < 0.1)
-            skip = 0.1;
+            skip = 0.1
         if (pass > 99.95 && pass < 100)
-            pass = 99.9;
+            pass = 99.9
         if (fail > 99.95 && fail < 100)
-            fail = 99.9;
+            fail = 99.9
         if (skip > 99.95 && skip < 100)
-            skip = 99.9;
-        return [round1(pass), round1(skip), round1(fail)];
+            skip = 99.9
+        return [Math.round(pass*10)/10, Math.round(skip*10)/10, Math.round(fail*10)/10];
     }
     function calculateWidths(num1, num2, num3) {
         if (num1 + num2 + num3 === 0)
             return [0.0, 0.0, 0.0];
         // Make small percentages better visible
         if (num1 > 0 && num1 < 1)
-            num1 = 1.0;
+            num1 = 1
         if (num2 > 0 && num2 < 1)
-            num2 = 1.0;
+            num2 = 1
         if (num3 > 0 && num3 < 1)
-            num3 = 1.0;
+            num3 = 1
         // Handle situation where some are rounded up
         while (num1 + num2 + num3 > 100) {
-            if (num1 >= num2 && num1 >= num3)
-                num1 = round1(num1 - 0.1);
-            else if (num2 >= num1 && num2 >= num3)
-                num2 = round1(num2 - 0.1);
-            else
-                num3 = round1(num3 - 0.1);
+            if (num1 > num2 && num1 > num3)
+                num1 -= 0.1;
+            else if (num2 > num1 && num2 > num3)
+                num2 -= 0.1;
+            else if (num3 > num1 && num3 > num2)
+                num3 -= 0.1;
+            else if (num1 > num3 && num1 == num2) {
+                num1 -= 0.1;
+                num2 -= 0.1;
+            }
+            else if (num1 > num2 && num1 == num3) {
+                num1 -= 0.1;
+                num3 -= 0.1;
+            }
+            else if (num2 > num1 && num2 == num3) {
+                num2 -= 0.1;
+                num3 -= 0.1;
+            }
         }
-        return [num1, num2, num3];
-    }
-    function round1(num) {
-        return Math.round(num*10) / 10;
+        return [Math.ceil(num1*10)/10, Math.ceil(num2*10)/10, Math.ceil(num3*10)/10];
     }
     return {
         Statistics: Statistics
@@ -1328,7 +1338,7 @@ window.testdata = function () {
     var STATUSES = ['FAIL', 'PASS', 'SKIP', 'NOT RUN'];
     var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'ITERATION', 'IF',
                          'ELSE IF', 'ELSE', 'RETURN', 'VAR', 'TRY', 'EXCEPT', 'FINALLY',
-                         'WHILE', 'GROUP', 'CONTINUE', 'BREAK', 'ERROR'];
+                         'WHILE', 'CONTINUE', 'BREAK', 'ERROR'];
     function addElement(elem) {
         if (!elem.id)
             elem.id = uniqueId();
@@ -1887,22 +1897,22 @@ storage = function () {
 window.output = {};
 </script>
 <script type="text/javascript">
-window.output["suite"] = [1,2,3,0,[],[0,0,294],[[4,5,6,0,[],[0,11,114],[],[[7,0,0,[],[0,88,10,8],[]],[9,0,0,[],[0,98,5,8],[]],[10,0,0,[],[0,104,5,11],[]],[12,0,0,[],[0,109,4,11],[]],[13,0,0,[],[0,113,4,11],[]],[14,0,0,[],[0,117,5,11],[]],[15,0,0,[],[0,122,3,16],[]]],[],[7,0,7,0]],[17,18,19,0,[],[0,126,35],[],[[20,0,0,[],[0,127,6,21],[]],[22,0,0,[],[0,134,6,21],[]],[23,0,0,[],[0,140,6,21],[]],[24,0,0,[],[0,146,6,21],[]],[25,0,0,[],[0,153,7,21],[]]],[],[5,0,5,0]],[26,27,28,0,[],[0,160,35],[],[[29,0,0,[],[0,162,14,30],[]],[31,0,0,[],[0,176,3,32],[]],[33,0,0,[],[0,179,7,30],[]],[34,0,0,[],[0,186,3,32],[]],[35,0,0,[],[0,189,3,32],[]],[36,0,0,[],[0,192,3,32],[]]],[],[6,0,6,0]],[37,38,39,0,[],[0,196,32],[],[[40,0,0,[],[0,197,6,41],[]],[42,0,0,[],[0,204,6,43],[]],[44,0,0,[],[0,209,6,41],[]],[45,0,0,[],[0,216,6,41],[]],[46,0,0,[],[0,221,6,41],[]]],[],[5,0,5,0]],[47,48,49,0,[],[0,228,34],[],[[50,0,0,[],[0,230,6,51],[]],[52,0,0,[],[0,236,6,51],[]],[53,0,0,[],[0,242,6,51],[]],[54,0,0,[],[0,249,6,51],[]],[55,0,0,[],[0,255,7,51],[]]],[],[5,0,5,0]],[56,57,58,0,[],[0,262,33],[],[[59,0,0,[],[0,264,5,41],[]],[60,0,0,[],[0,269,5,41],[]],[61,0,0,[],[0,274,5,41],[]],[62,0,0,[],[0,279,5,41],[]],[63,0,0,[],[0,284,5,41],[]],[64,0,0,[],[0,289,5,41],[]]],[],[6,0,6,0]]],[],[],[34,0,34,0]];
+window.output["suite"] = [1,2,3,0,[],[0,0,400],[],[[4,0,5,[],[1,125,14],[]],[6,0,7,[],[0,140,72,8],[]],[9,0,10,[],[0,212,8,8],[]],[11,0,12,[],[1,221,92],[]],[13,0,14,[],[0,313,88,15],[]]],[],[5,2,3,0]];
 </script>
 <script type="text/javascript">
 window.output["strings"] = [];
 </script>
 <script type="text/javascript">
-window.output["strings"] = window.output["strings"].concat(["*","*Testcases","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases","*testcases","*Auth Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/auth_tests.robot","*testcases/auth_tests.robot","*CT01 - Registro de novo usuário válido","*HTTPError: 400 Client Error: Bad Request for url: <a href=\"http://localhost:5000/api/v1/auth/register\">http://localhost:5000/api/v1/auth/register\x3c/a>","*CT02 - Registro com e-mail existente (Falha - 400)","*CT03 - Login de sucesso (Admin - 200)","*HTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/auth/login\">http://localhost:5000/api/v1/auth/login\x3c/a>","*CT04 - Login de sucesso (Usuário - 200)","*CT05 - Login inválido retorna 401","*CT06 - Acessar perfil autenticado (/auth/me - 200)","*CT07 - Acessar perfil sem token (401)","*HTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/auth/me\">http://localhost:5000/api/v1/auth/me\x3c/a>","*Movies Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/movies_tests.robot","*testcases/movies_tests.robot","*CT14 - Listar Filmes (Público - 200)","eNqNkEFLw0AQhe/5FY9eQkG6SdVLqAW1giIUsfUHLMkkWdzshNndxPrrTbV6E3qbmffN8N7sKMQetTaWqiJ53O9fHkRYClxlOe6tIRdwmrw5HUPLYj6pQs2CKLbASqMVqm9mbQh9oZTlUtuWfSiusyxTujdqyNVxc5Ia42brM8GV0uskubWeEUhLxaP787mjgUTb7z4KeXBZRpGjlORzPNNhZKmQvv8UfrEhS4HwSp6jlIS7A542KeijpzJMcZbQ0sRuSusv0HBAtkiS5RxbxukGRhNaON0R0i07SqcXRFdN2OV/mOp4MOTVL/oF+2F6XA==","*CT16 - Criação de Filme (Admin - 201)","*CT17 - Tentativa de Criar Filme (Usuário Padrão - 403)","*CT18 - Atualizar Filme (Admin - PUT)","*CT19 - Excluir Filme (Admin - DELETE)","*Reservations Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/reservations_tests.robot","*testcases/reservations_tests.robot","*CT33 - Criação de Reserva (Usuário Padrão - POST)","*Setup failed:\nHTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/auth/login\">http://localhost:5000/api/v1/auth/login\x3c/a>\n\nAlso teardown failed:\nVariable '${CREATED_RESERVATION_ID}' not found.","*CT34 - Listar Minhas Reservas (Usuário Padrão - /me)","*Setup failed:\nNo keyword with name 'CT33 - Criação de Reserva (Usuário Padrão - POST)' found.\n\nAlso teardown failed:\nVariable '${CREATED_RESERVATION_ID}' not found.","*CT36 - Tentativa de Listar TODAS as Reservas (Usuário Padrão - 403)","*CT35 - Listar TODAS as Reservas (Admin - 200)","*CT37 - Atualizar Reserva (Admin - PUT)","*CT38 - Excluir Reserva (Admin - DELETE)","*Sessions Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/sessions_tests.robot","*testcases/sessions_tests.robot","*CT28 - Listar todas as sessões (Público - 200)","*Setup failed:\nHTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/auth/login\">http://localhost:5000/api/v1/auth/login\x3c/a>","*CT27 - Criar uma nova sessão (Admin - POST)","*Setup failed:\nHTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/movies\">http://localhost:5000/api/v1/movies\x3c/a>","*CT32 - Tentativa de criar sessão com ID Inexistente (400)","*CT30 - Atualizar dados de uma sessão (Admin - PUT)","*CT31 - Excluir uma sessão (Admin - DELETE)","*Theaters Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/theaters_tests.robot","*testcases/theaters_tests.robot","*CT22 - Listar todos os teatros (Público - 200)","eNqNkN1Kw0AQhe/zFIfehIJ0k6o3oRbUCopQxNYHWJLJD253wuxsY316U63eCb2bmfPNcM5sSGOP2naOqiJ53G5fHkRYClxlOe5dR15xmrx5G7Vl6T6pQs2CKK7AwqIVqm8mrWpfGOO4tK7loMV1lmXG9p3Z5+a4OUpN5yfLM8GFscskuXWBoWSl4sH/+dzQnsS67z4KBXBZRpGjlORTPNNhYKmQvv8UYbYiR0p4pcBRSsLdAU+rFPTRU6ljnDmsNHE3pg0XaFiRzZJkPsWacbqBodMW3u4I6Zo9peMLoq9G7PI/zGhLVkmC+YW/APK/eyk=","*CT21 - Criar um novo teatro (Admin - POST)","*CT26 - Tentativa de Criar Teatro (Usuário Padrão - 403)","*CT24 - Atualizar dados de um teatro (Admin - PUT)","*CT25 - Excluir um teatro (Admin - DELETE)","*Users Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/users_tests.robot","*testcases/users_tests.robot","*CT08 - Listar todos os usuários (Admin - 200)","*CT09 - Tentativa de listar usuários (Usuário Padrão - 403)","*CT09 (b) - Tentativa de listar usuários (Sem Token - 401)","*CT11 - Atualizar dados de um usuário (Admin - PUT)","*CT12 - Excluir um usuário (Admin - DELETE)","*CT13 - Tentativa de excluir usuário (Usuário Padrão - 403)"]);
+window.output["strings"] = window.output["strings"].concat(["*","*Users Tests","*/home/gregoryozaki/Documentos/compass/challenge-final/api-tests/testcases/users_tests.robot","*testcases/users_tests.robot","*CT08 - Listar todos os usuários (Admin - 200)","*<p>Deve retornar 200 e lista de usuários (mínimo 2 registros)\x3c/p>","*CT09 - Tentativa de listar usuários (Usuário Padrão - 403)","*<p>Usuário padrão não pode listar todos os usuários\x3c/p>","*HTTPError: 401 Client Error: Unauthorized for url: <a href=\"http://localhost:5000/api/v1/users/\">http://localhost:5000/api/v1/users/\x3c/a>","*CT09 (b) - Tentativa de listar usuários (Sem Token - 401)","*<p>Acesso negado sem autenticação\x3c/p>","*CT11 - Atualizar dados de um usuário (Admin - PUT)","*<p>Cria usuário temporário e atualiza nome via admin\x3c/p>","*CT12 - Excluir um usuário (Admin - DELETE)","*<p>Cria usuário temporário e o exclui com sucesso\x3c/p>","eNqlkEFLw0AQhe/5FUMRQi9NWtOahlooongqosVrmWwmZnXdCbOTlCL+d9vSoneP783MG963Zvig/Y6lgp3VBjx+EsSv6GyFSpClGaxZ4YE7X8EzhZZ9oBjqox5F0coFBiWUincearSOqiJ6oZ4E3Ul3QgHYmE7kOIrGQ3jcbJ7uRViKU/6ds+QVzs7vt5oFOnEFLBAaofp20Ki2RZI4NugaDlpM0zRNsLVJP066QBKS2TzNTJrh9TSfTW4MUZbPs9Lkg+U/jhcJLqNoMjwCYNdb/wY9isXSHVhdfVXkSGkrZzqjoKhd2Bqu6Du+QIGVqtiyUzoXjdfsabNvDzS5fCej0GAAz4CXRYj/JMU/tHWOgQ=="]);
 </script>
 <script type="text/javascript">
-window.output["stats"] = [[{"elapsed":"00:00:00","fail":34,"label":"All Tests","pass":0,"skip":0}],[],[{"elapsed":"00:00:00","fail":34,"id":"s1","label":"Testcases","name":"Testcases","pass":0,"skip":0},{"elapsed":"00:00:00","fail":7,"id":"s1-s1","label":"Testcases.Auth Tests","name":"Auth Tests","pass":0,"skip":0},{"elapsed":"00:00:00","fail":5,"id":"s1-s2","label":"Testcases.Movies Tests","name":"Movies Tests","pass":0,"skip":0},{"elapsed":"00:00:00","fail":6,"id":"s1-s3","label":"Testcases.Reservations Tests","name":"Reservations Tests","pass":0,"skip":0},{"elapsed":"00:00:00","fail":5,"id":"s1-s4","label":"Testcases.Sessions Tests","name":"Sessions Tests","pass":0,"skip":0},{"elapsed":"00:00:00","fail":5,"id":"s1-s5","label":"Testcases.Theaters Tests","name":"Theaters Tests","pass":0,"skip":0},{"elapsed":"00:00:00","fail":6,"id":"s1-s6","label":"Testcases.Users Tests","name":"Users Tests","pass":0,"skip":0}]];
+window.output["stats"] = [[{"elapsed":"00:00:00","fail":3,"label":"All Tests","pass":2,"skip":0}],[],[{"elapsed":"00:00:00","fail":3,"id":"s1","label":"Users Tests","name":"Users Tests","pass":2,"skip":0}]];
 </script>
 <script type="text/javascript">
-window.output["baseMillis"] = 1761887418103;
+window.output["baseMillis"] = 1761919049704;
 </script>
 <script type="text/javascript">
-window.output["generated"] = 308;
+window.output["generated"] = 405;
 </script>
 <script type="text/javascript">
 window.output["expand_keywords"] = null;
@@ -2354,7 +2364,7 @@ function hideHiddenDetailsColumns(elem) {
 
 <script type="text/x-jquery-tmpl" id="tagStatisticsRowTemplate">
   <tr onclick="tagDetailSelected('${label}')" class="row-${$item.index}">
-    <td class="stats-col-name" title="${doc}">
+    <td class="stats-col-name" title="{{html doc}}">
       <div class="stat-name">
         <a href="#tags?${label}">{{html label}}</a>
         {{if info}}(${info}){{/if}}

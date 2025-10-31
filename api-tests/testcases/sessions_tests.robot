@@ -4,20 +4,17 @@ Resource    ../resources/keywords.robot
 Library     RequestsLibrary
 
 Test Setup    Login As Admin
-# Teardown combinado com Run Keywords AND
-Test Teardown    Run Keywords    Delete Resource By ID    ${CREATED_SESSION_ID}    /sessions/    AND
-...              Delete Resource By ID    ${CREATED_MOVIE_ID}    /movies/    AND
-...              Delete Resource By ID    ${CREATED_THEATER_ID}    /theaters/
+Test Teardown    Full Cleanup Teardown  # Chamada correta para limpeza completa
 
 *** Variables ***
 ${SESSION_ENDPOINT}    /sessions/
 
 *** Keywords ***
-# Keyword que cria um Movie e um Theater para a Session
+# Keyword que cria Movie e Theater (dependências)
 Create Session Dependencies
     Log    Criando Movie e Theater para dependência da Session.
     
-    # 1. Cria um Movie (Necessário para o POST /sessions)
+    # 1. Cria um Movie 
     ${movie_random}=    Generate Random String    5    [LETTERS]
     Create Authorized Session    ${TOKEN_ADMIN}
     ${movie_body}=    Create Dictionary    title=Filme Teste Session ${movie_random}    release_date=2026-01-01    duration=90    genre=Comedy
@@ -25,7 +22,7 @@ Create Session Dependencies
     ${movie_id}=    Get From Dictionary    ${movie_response.json()}    _id
     Set Global Variable    ${CREATED_MOVIE_ID}    ${movie_id}
     
-    # 2. Cria um Theater (Necessário para o POST /sessions)
+    # 2. Cria um Theater
     ${theater_random}=    Generate Random String    4    [NUMBERS]
     ${theater_body}=    Create Dictionary    name=Teatro Teste Session ${theater_random}    location=East    capacity=100
     ${theater_response}=    POST On Session    api    /theaters    json=${theater_body}
@@ -39,7 +36,7 @@ CT28 - Listar todas as sessões (Público - 200)
     Validate 200 OK Response    ${response}
 
 CT27 - Criar uma nova sessão (Admin - POST)
-    [Setup]    Create Session Dependencies
+    [Setup]    Run Keywords    Login As Admin    AND    Create Session Dependencies
     
     Create Authorized Session    ${TOKEN_ADMIN}
     ${session_body}=    Create Dictionary    movie_id=${CREATED_MOVIE_ID}    theater_id=${CREATED_THEATER_ID}    time=20:00    price=25.0

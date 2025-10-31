@@ -13,12 +13,13 @@ ${USER_PASSWORD}     password123
 ${TOKEN_ADMIN}       None
 ${TOKEN_USER}        None
 
-# Variáveis para IDs Criados/Manipulados (Corrigido com espaçamento)
+# Variáveis para IDs Criados/Manipulados (Espaçamento corrigido)
 ${CREATED_USER_ID}     None
 ${CREATED_MOVIE_ID}    None
 ${CREATED_THEATER_ID}  None
 ${CREATED_SESSION_ID}  None
-${CREATED_RESERVATION_ID} None
+${CREATED_RESERVATION_ID}    None  
 
 # Prefixo para geração de dados
 ${NEW_USER_EMAIL_PREFIX}    testuser
+${USER_EMAIL_TEMP}    temp.user@cinema.com

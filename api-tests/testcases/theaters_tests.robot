@@ -4,7 +4,7 @@ Resource    ../resources/keywords.robot
 Library     RequestsLibrary
 
 Test Setup    Login As Admin
-Test Teardown    Run Keywords    Delete Resource By ID    ${CREATED_THEATER_ID}    /theaters/
+Test Teardown    Cleanup Theater Teardown # Chamada correta
 
 *** Variables ***
 ${THEATER_ENDPOINT}    /theaters/
@@ -17,6 +17,7 @@ CT22 - Listar todos os teatros (Público - 200)
     Validate 200 OK Response    ${response}
 
 CT21 - Criar um novo teatro (Admin - POST)
+    [Documentation]    Criação de um novo teatro, testando privilégios de Admin.
     ${random_suffix}=    Generate Random String    4    [NUMBERS]
     ${new_name}=        Catenate    SEPARATOR=    ${NEW_THEATER_NAME_PREFIX}    ${random_suffix}
     
