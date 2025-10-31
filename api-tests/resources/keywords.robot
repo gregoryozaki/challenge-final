@@ -1,7 +1,7 @@
 *** Settings ***
 Library    RequestsLibrary
 Library    Collections
-Library    String
+Library    String  # Adicionado para usar Generate Random String
 
 *** Keywords ***
 # --- Autenticação e Sessões ---
@@ -53,13 +53,10 @@ Validate 403 Forbidden Response
     Log    Status 403 (Forbidden) Validado.
 
 # --- Keywords de Limpeza de Dados (Para Teardown) ---
-Cleanup Movie
-    [Arguments]    ${movie_id}
-    Run Keyword If    '${movie_id}' != 'None' and '${TOKEN_ADMIN}' != 'None'
-    ...    Delete Resource By ID    ${movie_id}    /movies/
-    
 Delete Resource By ID
     [Arguments]    ${resource_id}    ${endpoint}
-    Create Authorized Session    ${TOKEN_ADMIN}
-    ${response}=    DELETE On Session    api    ${endpoint}${resource_id}
-    # Não valida status, apenas tenta limpar (pode falhar se o recurso já foi deletado)
+    # Tenta rodar a limpeza apenas se o recurso existir e o token for válido
+    Run Keyword If    '${resource_id}' != 'None' and '${TOKEN_ADMIN}' != 'None'
+    ...    Run Keywords    
+    ...    Create Authorized Session    ${TOKEN_ADMIN}    AND
+    ...    DELETE On Session    api    ${endpoint}${resource_id}
