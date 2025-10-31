@@ -264,11 +264,3 @@ Após corrigir o header `Bearer`, todos os módulos passaram com sucesso:
 - [ ] Integração contínua (CI/CD) com GitHub Actions.
 - [ ] Adicionar variáveis de ambiente (`.env`) para URLs e credenciais.
 
----
-
-## 🧑‍💻 Autor
-
-**Gregory Ozaki**  
-Projeto desenvolvido como parte do *Challenge Técnico - Compass UOL AWS & AI for QE*  
-📅 Outubro 2025  
-📍 Brasil
